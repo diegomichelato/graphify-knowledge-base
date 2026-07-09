@@ -40,6 +40,35 @@ If information is missing from the graph, enrich it so future requests become mo
 efficient. The objective is to continuously improve the knowledge graph while reducing
 token usage and avoiding unnecessary repository scans.
 
+## Commands
+
+| Command | Implementation | Purpose |
+|---|---|---|
+| `/graph health` | `python3 tools/graph_health.py [--source <app-repo>] [--json]` | Nodes, relationships, growth, orphans, missing docs, broken links, duplicates, weak communities, unindexed files, doc/semantic coverage, debt hotspots |
+| `/graph impact <node>` | `python3 tools/graph_impact.py <node> [--json]` | Dependencies, dependents, affected APIs/tests, docs, ADRs, business features, blast radius + risk |
+| changelog | `python3 tools/graph_changelog.py --old <rev> --new graph.json` | Auto-diff two graph versions into a CHANGELOG.md entry |
+| incremental update | `tools/update_knowledge.sh <app-repo> ["note"]` | Detect changes → graphify (cache skips unchanged) → sync artifacts → changelog → commit |
+
+When the user types `/graph health` or `/graph impact X`, run the matching script and present its output.
+
+## Knowledge system layout
+
+- `adr/` — Architecture Decision Records. Create/update one whenever a meaningful
+  architectural decision is made; link modules, features, implementation, docs.
+  Never lose historical decisions — supersede, don't rewrite.
+- `business/` — non-code knowledge: business rules, customer value, roadmap,
+  requirements, features, environments, configuration, operations, standards.
+  Enrich whenever business context is learned.
+- `CHANGELOG.md` — every graph update generates an entry (added/removed/renamed
+  components, API changes, dependency changes, doc/architecture/business changes).
+
+## Continuous learning
+
+At the end of every successful development session: update the graph
+(`tools/update_knowledge.sh`), documentation, ADRs, and changelog; commit; push.
+The knowledge base must become more complete without manual maintenance.
+Always prefer retrieval over re-analysis.
+
 ## Knowledge graph maintenance
 
 Whenever source code changes:
