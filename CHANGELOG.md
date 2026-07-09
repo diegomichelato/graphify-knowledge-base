@@ -2,6 +2,54 @@
 
 ## 2026-07-09
 
+Graph: 2163→2163 nodes, 5556→5730 relationships.
+
+### Added components (0)
+  - (none)
+### Removed components (0)
+  - (none)
+### Renamed components (0)
+  - (none)
+### API changes
+  - (none)
+### Dependency changes (+896 / -722)
+  - `agentfactory` —defined_in→ `file:/home/claude/graphify-dotnet/src/Graphify.Sdk/AgentFactory.cs`
+  - `agentfactory_graphify_sdk` —exports→ `ollamaclientfactory`
+  - `agentfactory_graphify_sdk` —exports→ `ollamaoptions`
+  - `analysisresult` —defined_in→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/AnalysisResult.cs`
+  - `analysisresult` —tested_by→ `modeltests`
+  - `analysisresult` —tested_by→ `pipelineintegrationtests`
+  - `analysisresult` —tested_by→ `reportgeneratortests`
+  - `analysisresult_graphify_models` —exports→ `filecategory`
+  - `analysisresult_graphify_models` —exports→ `filetype`
+  - `analysisresult_graphify_models` —exports→ `graphedge`
+  - `analysisresult_graphify_models` —exports→ `graphnode`
+  - `analysisresult_graphify_models` —exports→ `graphreport`
+  - `analyzer` —defined_in→ `file:/home/claude/graphify-dotnet/src/Graphify/Pipeline/Analyzer.cs`
+  - `analyzer` —references→ `graphedge`
+  - `analyzer` —references→ `graphnode`
+  - … and 881 more
+  - `agentfactory_graphify_sdk` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify.Sdk/OllamaClientFactory.cs`
+  - `agentfactory_graphify_sdk` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify.Sdk/OllamaOptions.cs`
+  - `analysisresult` —tested_by→ `file:/home/claude/graphify-dotnet/src/tests/Graphify.Integration.Tests/PipelineIntegrationTests.cs`
+  - `analysisresult` —tested_by→ `file:/home/claude/graphify-dotnet/src/tests/Graphify.Tests/Models/ModelTests.cs`
+  - `analysisresult` —tested_by→ `file:/home/claude/graphify-dotnet/src/tests/Graphify.Tests/Pipeline/ReportGeneratorTests.cs`
+  - `analysisresult_graphify_models` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/FileCategory.cs`
+  - `analysisresult_graphify_models` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/FileType.cs`
+  - `analysisresult_graphify_models` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/GraphEdge.cs`
+  - `analysisresult_graphify_models` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/GraphNode.cs`
+  - `analysisresult_graphify_models` —exports→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/GraphReport.cs`
+  - `analyzer` —references→ `file:/home/claude/graphify-dotnet/src/Graphify/Graph/KnowledgeGraph.cs`
+  - `analyzer` —references→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/GraphEdge.cs`
+  - `analyzer` —references→ `file:/home/claude/graphify-dotnet/src/Graphify/Models/GraphNode.cs`
+  - `analyzer` —implements→ `file:/home/claude/graphify-dotnet/src/Graphify/Pipeline/IPipelineStage.cs`
+  - `analyzer` —tested_by→ `file:/home/claude/graphify-dotnet/src/tests/Graphify.Integration.Tests/PipelineIntegrationTests.cs`
+  - … and 707 more
+### Architecture / business notes
+  - Structural refinement: 97 wiki pages created (broken links 98->0), entity/file canonicalization (defined_in/contains, 130 entities marked retrieval_preferred), 722 structural edges migrated from file aliases to canonical entities
+
+## 2026-07-09
+
 Graph: 1620→2163 nodes, 2852→5556 relationships.
 
 ### Added components (543)

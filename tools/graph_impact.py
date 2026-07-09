@@ -13,15 +13,21 @@ from collections import defaultdict, deque
 
 def find_node(nodes, query):
     q = query.lower()
+
+    def rank(n):
+        # canonical Entity nodes first, then anything with a file, then shortest
+        return ((n.get('metadata') or {}).get('retrieval_preferred') != 'true',
+                n['id'].startswith(('file:', 'doc:')),
+                0 if n.get('file_path') else 1,
+                len(n['label']))
+
     exact = [n for n in nodes if n['id'].lower() == q or n['label'].lower() == q]
     if exact:
-        return exact[0]
+        return sorted(exact, key=rank)[0]
     partial = [n for n in nodes if q in n['id'].lower() or q in n['label'].lower()]
     if not partial:
         return None
-    # prefer file nodes, then shortest label
-    partial.sort(key=lambda n: (0 if n.get('file_path') else 1, len(n['label'])))
-    return partial[0]
+    return sorted(partial, key=rank)[0]
 
 
 def grep_dir(directory, term):

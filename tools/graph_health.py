@@ -96,7 +96,18 @@ def main():
             by_label[fp.lower()].append(n['id'])
         else:
             by_label[lbl].append(n['id'])
-    duplicates = {l: ids for l, ids in by_label.items() if len(ids) > 1}
+    all_dupes = {l: ids for l, ids in by_label.items() if len(ids) > 1}
+    # pairs joined by a canonical defined_in/implements edge are LINKED aliases,
+    # not unresolved duplicates
+    linked_pairs = set()
+    for e in edges:
+        if e['relationship'] in ('defined_in', 'implements', 'contains'):
+            linked_pairs.add(frozenset((e['source'], e['target'])))
+    def unresolved(ids):
+        return any(frozenset((a, b)) not in linked_pairs
+                   for i, a in enumerate(ids) for b in ids[i + 1:])
+    duplicates = {l: ids for l, ids in all_dupes.items() if unresolved(ids)}
+    linked_dupes = len(all_dupes) - len(duplicates)
 
     # --- communities ------------------------------------------------------
     comm_nodes = defaultdict(list)
@@ -150,6 +161,7 @@ def main():
         'orphan_nodes': [n['label'] for n in orphans],
         'duplicate_concepts': {l: ids for l, ids in list(duplicates.items())[:15]},
         'duplicate_concept_count': len(duplicates),
+        'linked_alias_pairs': linked_dupes,
         'weakly_connected_communities': weak[:10],
         'documentation_coverage': f'{doc_coverage:.0%} of file nodes have wiki articles ({documented}/{len(file_nodes)})',
         'broken_wiki_links': broken[:15],

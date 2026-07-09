@@ -27,7 +27,9 @@ def main():
     by_file_label = {}                      # (file_path, label.lower()) -> id
     ns_canonical = {}                       # namespace label -> canonical id
     file_entity = {}                        # file_path -> entity node id (label == basename)
-    for n in sorted(nodes, key=lambda x: x['id']):
+    # Entity nodes are the preferred retrieval target: index them BEFORE file:/doc:
+    # nodes so structural edges attach to entities, not file aliases.
+    for n in sorted(nodes, key=lambda x: (x['id'].startswith(('file:', 'doc:')), x['id'])):
         fp, lbl = n.get('file_path'), n['label']
         if fp:
             by_file_label.setdefault((fp, lbl.lower()), n['id'])
