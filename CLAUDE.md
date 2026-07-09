@@ -40,6 +40,50 @@ If information is missing from the graph, enrich it so future requests become mo
 efficient. The objective is to continuously improve the knowledge graph while reducing
 token usage and avoiding unnecessary repository scans.
 
+## Knowledge graph maintenance
+
+Whenever source code changes:
+
+1. Detect the files that changed (e.g. `git diff --name-only`).
+2. Run Graphify only on the changed files whenever incremental indexing is supported
+   (the semantic cache skips unchanged files automatically).
+3. Update `graph.json`, `wiki/`, `obsidian/`, and `GRAPH_REPORT.md`.
+4. Commit the updated knowledge base.
+5. Push changes to the `graphify-knowledge-base` repository.
+6. Never rebuild the entire graph unless explicitly requested.
+
+## Repository strategy
+
+Treat the application repository and the knowledge repository as two synchronized repositories.
+
+| Repository | Contents |
+|---|---|
+| **Application** ([elbruno/graphify-dotnet](https://github.com/elbruno/graphify-dotnet)) | Source code, tests, documentation |
+| **Knowledge** (this repo) | Graph, wiki, Obsidian vault, reports, architecture, semantic documentation |
+
+Every meaningful architectural change should update both repositories.
+
+## Future AI provider
+
+When an AI provider (Ollama, Azure OpenAI, OpenAI, or GitHub Models) becomes available:
+
+- Generate semantic summaries.
+- Discover cross-file relationships.
+- Generate business-domain nodes.
+- Improve architectural documentation.
+- Rename anonymous communities (currently "Entity (Community N)").
+- Update semantic links without rebuilding unchanged nodes.
+
+Always preserve existing graph identifiers whenever possible.
+
+## Token optimization
+
+Before reading any file:
+
+1. Check whether the answer already exists in the knowledge graph.
+2. If it does, never reload the file.
+3. Only retrieve the smallest amount of source code necessary to answer the question.
+
 ## Quick queries
 
 ```bash
