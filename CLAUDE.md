@@ -47,7 +47,9 @@ token usage and avoiding unnecessary repository scans.
 | `/graph health` | `python3 tools/graph_health.py [--source <app-repo>] [--json]` | Nodes, relationships, growth, orphans, missing docs, broken links, duplicates, weak communities, unindexed files, doc/semantic coverage, debt hotspots |
 | `/graph impact <node>` | `python3 tools/graph_impact.py <node> [--json]` | Dependencies, dependents, affected APIs/tests, docs, ADRs, business features, blast radius + risk |
 | changelog | `python3 tools/graph_changelog.py --old <rev> --new graph.json` | Auto-diff two graph versions into a CHANGELOG.md entry |
-| incremental update | `tools/update_knowledge.sh <app-repo> ["note"]` | Detect changes → graphify (cache skips unchanged) → sync artifacts → changelog → commit |
+| incremental update | `tools/update_knowledge.sh <app-repo> ["note"]` | Detect changes → graphify (cache skips unchanged) → sync artifacts → static augmentation → changelog → commit |
+| doc/config indexing | `python3 tools/index_docs.py --source <app-repo>` | Statically index markdown/JSON/YAML: file+section nodes, `references`/`configures` edges, wiki articles (no AI) |
+| structural edges | `dotnet run --project tools/RoslynEdges -- <app-repo> out.json` then `python3 tools/merge_edges.py --edges out.json` | Roslyn-verified `implements`/`inherits`/`overrides`/`calls`/`references`/`tested_by`/`imports`/`exports` edges. Only statically provable relationships; unresolved symbols are skipped, never fabricated |
 
 When the user types `/graph health` or `/graph impact X`, run the matching script and present its output.
 

@@ -30,6 +30,20 @@ cp "$APP_REPO/graphify-out/GRAPH_REPORT.md" "$KB_DIR/GRAPH_REPORT.md"
 rsync -a --delete "$APP_REPO/graphify-out/wiki/" "$KB_DIR/wiki/"
 rsync -a --delete "$APP_REPO/graphify-out/obsidian/" "$KB_DIR/obsidian/"
 
+echo "==> Augmenting graph: static doc/config indexing (no AI)"
+cd "$KB_DIR"
+python3 tools/index_docs.py --source "$APP_REPO"
+
+echo "==> Augmenting graph: Roslyn structural edges (no AI)"
+if command -v dotnet >/dev/null 2>&1; then
+    EDGES=$(mktemp --suffix=.json)
+    dotnet run --project tools/RoslynEdges -c Release -- "$APP_REPO" "$EDGES"
+    python3 tools/merge_edges.py --edges "$EDGES"
+    rm -f "$EDGES"
+else
+    echo "    dotnet not found — skipping Roslyn edge pass"
+fi
+
 echo "==> Generating changelog entry"
 cd "$KB_DIR"
 if ! git diff --quiet graph.json; then

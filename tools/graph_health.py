@@ -87,9 +87,15 @@ def main():
                      'static()', 'abstract()', 'override()', 'async()'}
     by_label = defaultdict(list)
     for n in nodes:
-        if n['label'].lower() in CONTROL_NOISE:
+        lbl = n['label'].lower()
+        if lbl in CONTROL_NOISE:
             continue  # AST control-flow noise, not real concepts
-        by_label[n['label'].lower()].append(n['id'])
+        fp = n.get('file_path')
+        if fp and lbl == os.path.basename(fp).lower():
+            # file-identity node: same basename at different paths is NOT a duplicate
+            by_label[fp.lower()].append(n['id'])
+        else:
+            by_label[lbl].append(n['id'])
     duplicates = {l: ids for l, ids in by_label.items() if len(ids) > 1}
 
     # --- communities ------------------------------------------------------
